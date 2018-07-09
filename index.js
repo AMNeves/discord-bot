@@ -67,6 +67,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 		
 		if(json.hasOwnProperty(newMember.id)){
 			json[newMember.id].score++;
+			json[newMember.id].username =newMember.displayName;
 
 		}else{
 			json[newMember.id] = {

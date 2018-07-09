@@ -18,11 +18,13 @@ module.exports = {
 
     const filter = (reaction, user) => reaction.emoji.name === "👍";
 
-    let collector = message.createReactionCollector(filter, { time: 5000 });    
+    let collector = message.createReactionCollector(filter, { time: waitTime });    
     
+    var votes = 0;
+    collector.on('collect', r => { votes++; console.log(`Collected ${r.emoji.name}`)});
+
     collector.on('end', collected => {
-        votes = collected.size - 1;
-        console.log(votes)
+    
         if (votes > Math.floor(totalMembers/2)) {
             muted.setMute(true, 'It needed to be done');
             message.channel.send("MUTADO MAMADO " + muted.toString())
