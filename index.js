@@ -41,14 +41,43 @@ client.on('message', message => {
 	if (!client.commands.has(command)) return;
 
 	try {
-		client.commands.get(command).execute(message, args, client);
-		console.log(`'${message.author.username}' used: ${command}`);
+			ready = false;
+			client.commands.get(command).execute(message, args, client);
+			console.log(`'${message.author.username}' used: ${command}`);
 	}
 	catch (error) {
 		console.error(error);
-		message.reply('There was an error trying to execute that command!');
 	}
 	
 });
 
 client.login(token);
+
+client.on('voiceStateUpdate', (oldMember, newMember) => {
+	let newUserChannel = newMember.voiceChannel
+	let oldUserChannel = oldMember.voiceChannel
+	let json = JSON.parse(fs.readFileSync('./data/pomada.json')); 
+
+	if(oldUserChannel === undefined && newUserChannel !== undefined) {
+  
+	   return;
+  
+	} else if((oldUserChannel !== undefined && newUserChannel === undefined) || newMember.selfDeaf ){
+		//pomada
+		
+		if(json.hasOwnProperty(newMember.id)){
+			json[newMember.id].score++;
+
+		}else{
+			json[newMember.id] = {
+				"username": newMember.displayName,
+				"score": 1
+			}
+		}
+
+	}
+	
+	let data = JSON.stringify(json);  
+	fs.writeFileSync('./data/pomada.json', data);
+
+  })

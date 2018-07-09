@@ -1,5 +1,5 @@
 module.exports = {
-	name: 'pomada',
+	name: 'halibut',
 	description: 'gives pomada para desmamar',
 	execute(message) {
 		const { voiceChannel } = message.member;

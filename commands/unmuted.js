@@ -1,6 +1,6 @@
 
 module.exports = {
-    name: 'muted',
+    name: 'unmuted',
     description: 'Start global vote kick',
     execute(message, args) {
     // Only try to join the sender's voice channel if they are in one themselves
@@ -16,20 +16,19 @@ module.exports = {
     muted = message.mentions.members.first();
     message.react("👍");
 
-    const filter = (reaction, user) => reaction.emoji.name === "👍";
-
-    let collector = message.createReactionCollector(filter, { time: 5000 });    
-    
-    collector.on('end', collected => {
+    message.awaitReactions(reaction => reaction.emoji.name === "👍", {time: 15000 })
+    .then(collected => {
         votes = collected.size - 1;
-        console.log(votes)
         if (votes > Math.floor(totalMembers/2)) {
-            muted.setMute(true, 'It needed to be done');
-            message.channel.send("MUTADO MAMADO " + muted.toString())
-        } else{
+            muted.setMute(false, 'It needed to be done').then(() => console.log(`Muted '${muted.displayName}'`));
             message.channel.send("DESMAMADO " + muted.toString())
+
+        } else{
+            message.channel.send("MUTADO MAMADO " + muted.toString())
         }
+    
     });
+
 
     },
 };
