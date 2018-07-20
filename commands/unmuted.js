@@ -14,6 +14,10 @@ module.exports = {
         });
 
     muted = message.mentions.members.first();
+    if(muted === undefined){
+        message.channel.send("Dá mention em alguem seu atrasado")
+        return;
+    }
     message.react("👍");
 
     const filter = (reaction, user) => reaction.emoji.name === "👍";
